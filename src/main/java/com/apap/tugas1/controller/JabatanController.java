@@ -44,7 +44,7 @@ public class JabatanController {
 	private String hapus(@ModelAttribute JabatanModel jabatan, Model model) {
 		try {
 			jabatanService.hapusJabatan(jabatan.getId());
-			model.addAttribute("notif", "Jabatan " + jabatan.getNama() + " telah dihapus");
+			model.addAttribute("notif", "Jabatan " + " telah dihapus");
 			model.addAttribute("title", "Hapus Jabatan");
 			return "notif";
 		} 
@@ -52,6 +52,7 @@ public class JabatanController {
 			JabatanModel jabatanLama = jabatanService.getDetailJabatanById(jabatan.getId());
 			model.addAttribute("notif", "Jabatan " + jabatanLama.getNama() + " tidak bisa dihapus karena masih ada pegawai");
 			model.addAttribute("jabatan", jabatanLama);
+			model.addAttribute("jmlPegawai", jabatan.getPegawaiList().size());
 			return "view-jabatan";
 		}
 		
@@ -79,4 +80,5 @@ public class JabatanController {
 		model.addAttribute("jabatanList", jabatanService.getAllJabatan());
 		return "viewall-jabatan";
 	}
+	
 }
