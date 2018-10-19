@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Ubah Pegawai</title>
+	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+	<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body>
+	<nav th:replace="fragments/fragment :: navbar" ></nav>
+	
+	<h3>Ubah Pegawai</h3>
+	<form th:action="@{/pegawai/ubah}" th:object="${pegawaiTemp}" method="POST">
+		<input type="hidden" name="id" th:value="${pegawaiTemp.id}" >
+		<input type="hidden" name="nip" th:value="${pegawaiTemp.nip}" />
+		<table>
+			<tr>
+			<td th:text="Nama" style="width:200px"></td>
+			<td><input id="nama" th:value="*{nama}"type="text" name="nama" class="form-control"/></td>
+			</tr>
+			<tr>
+			<td th:text="'Tempat Lahir'"></td>
+			<td><input id= "tempatLahir" th:value="*{tempatLahir}" type="text" name="tempatLahir" class="form-control"/></td>
+			</tr>
+			<tr>
+			<td th:text="'Tanggal Lahir'"></td>
+			<td><input id="tanggalLahir" th:value="*{tanggalLahir}" type="date" name="tanggalLahir" class="form-control"/></td>
+			</tr>
+			<tr>
+			<td th:text="'Tahun Masuk'"></td>
+			<td><input id="tahunMasuk" th:value="*{tahunMasuk}" type="number" name="tahunMasuk" maxLength="4" pattern="\d{4}" class="form-control"/></td>
+			</tr>
+			<tr>
+			<td th:text="'Provinsi'" ></td>
+			<td>
+				<select name="idProvinsi" id="idProvinsi" class="form-control" required="required" th:value="${listProvinsi}">
+			    	<option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}" th:selected="${provinsi.id} == *{idInstansi.idProvinsi.id}"></option>
+			    </select>
+			</td>
+			</tr>
+			<tr>
+			<td th:text="'Nama Instansi'"></td>
+			<td>
+				<select name="idInstansi" id="idInstansi" class="form-control" required="required" th:value="*{idInstansi}">
+			    	<option th:value="*{idInstansi.id}" selected="selected" th:text="*{idInstansi.nama}"></option>
+		            <option th:each="instansi : ${listInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}" ></option>
+			    </select>
+			</td>
+			</tr>
+			<tr>
+			<td th:text="'Jabatan'"></td>
+			<td>
+				<span th:each="jabatan,rowStatus : ${pegawaiTemp.jabatanList}">
+					<select required="required" class="form-control" th:field="${pegawaiTemp.jabatanList[__${rowStatus.index}__]}" >
+						<option th:each="jabatan : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}"></option>
+					</select>
+				</span>
+			</td>
+			</tr>
+			<tr>
+			<td></td>
+			<td><button type="submit" name="addRowUpdate">Tambah Jabatan Lainnya</button></td>
+			</tr>
+			<tr>
+		</table>
+		<button id="submit" type="submit">Submit</button>
+	</form>
+</body>
+
+<script th:inline="javascript">
+	$('#idProvinsi').change(
+	     function() {
+	         $.getJSON("/instansi/listIntansiFromProvinsi", {
+	             idProvinsi : $(this).val(),
+	             ajax : 'true'
+	         }, function(instansi) {
+	             var html = '<option value="">-- Pilih Instansi --</option>';
+	             var len = instansi.length;
+	             for ( var i = 0; i < len; i++) {
+	                 html += '<option value="' + instansi[i].id + '">'
+	                         + instansi[i].nama + '</option>';
+	             }
+	             html += '</option>';
+	             $('#idInstansi').html(html);
+	         });
+	     });
+	</script>
+
+</html>

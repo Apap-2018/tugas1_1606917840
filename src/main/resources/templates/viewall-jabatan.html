@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.themeleaf.org">
+	<head>
+		<title>Detail Pegawai</title>
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+	</head>
+	<body>
+		<nav th:replace="fragments/fragment :: navbar" ></nav>
+		<p></p>
+		<div class="container-fluid">
+			<table id="myTable" class="display">
+				<thead class="thead-light">
+					<tr>
+						<th style="text-align: center">Nama</th>
+						<th style="text-align: center">Deskripsi</th>
+						<th style="text-align: center">Gaji Pokok</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="jabatan : ${jabatanList}">
+						<td th:text="${jabatan.nama}"></td>
+						<td th:text="${jabatan.deskripsi}"></td>
+						<td th:text="'Rp ' + ${#numbers.formatInteger(jabatan.gajiPokok,3,'POINT')}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+	
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+	<script>
+		$(document).ready( function () {
+		    $('#myTable').DataTable();
+		    $('#viewall-jabatan').addClass('active');
+		} );
+	</script>
+</html>
