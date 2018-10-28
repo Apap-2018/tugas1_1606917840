@@ -52,7 +52,7 @@ public class JabatanController {
 			JabatanModel jabatanLama = jabatanService.getDetailJabatanById(jabatan.getId());
 			model.addAttribute("notif", "Jabatan " + jabatanLama.getNama() + " tidak bisa dihapus karena masih ada pegawai");
 			model.addAttribute("jabatan", jabatanLama);
-			model.addAttribute("jmlPegawai", jabatan.getPegawaiList().size());
+			model.addAttribute("jmlPegawai", jabatanLama.getPegawaiList().size());
 			return "view-jabatan";
 		}
 		

@@ -9,7 +9,9 @@
 
 <body>
 	<nav th:replace="fragments/fragment :: navbar" ></nav>
-	<h2 th:text="${notif}"></h2>
+	<div class="container-fluid">
+		<h2 th:text="${notif}"></h2>
+	</div>
 </body>
 	<script th:inline="javascript">
 	$(document).ready(function () {

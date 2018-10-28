@@ -57,7 +57,7 @@ public class PegawaiModel {
 	@JoinColumn(name="id_instansi", referencedColumnName="id", nullable=false)
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private InstansiModel idInstansi;
+	private InstansiModel instansi;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="jabatan_pegawai", joinColumns = @JoinColumn(name="id_pegawai"), inverseJoinColumns = @JoinColumn(name="id_jabatan"))
@@ -111,12 +111,12 @@ public class PegawaiModel {
 		this.tahunMasuk = tahunMasuk;
 	}
 
-	public InstansiModel getIdInstansi() {
-		return idInstansi;
+	public InstansiModel getInstansi() {
+		return instansi;
 	}
-
-	public void setIdInstansi(InstansiModel idInstansi) {
-		this.idInstansi = idInstansi;
+	
+	public void setInstansi(InstansiModel instansi) {
+		this.instansi = instansi;
 	}
 
 	public List<JabatanModel> getJabatanList() {

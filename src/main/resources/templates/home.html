@@ -77,10 +77,10 @@
 					<div class="card-body">
 					<label for="idInstansi">Pilih Instansi</label>
 						<form th:action="@{/pegawai/termuda-tertua}" method="get">
-							<select required="required" name="idInstansi" class="form-control">
+							<select required="required" name="instansi" class="form-control">
 								<option disabled="disabled" selected="selected">-- Pilih Instansi --</option>
 								<div th:each="instansi : ${listInstansi}">
-									<option th:value="${instansi.id}" th:text="${instansi.nama} + ' - ' + ${instansi.idProvinsi.nama}"></option>
+									<option th:value="${instansi.id}" th:text="${instansi.nama} + ' - ' + ${instansi.provinsi.nama}"></option>
 								</div>
 							</select>
 							<p></p>

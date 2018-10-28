@@ -16,35 +16,50 @@
 			<table>
 				<tr>
 				<td th:text="Nama" style="width:200px"></td>
-				<td><input id="nama" type="text" name="nama" class="form-control"/></td>
+				<td><input id="nama" required="required" type="text" name="nama" th:value="*{nama}" class="form-control"/></td>
 				</tr>
 				<tr>
 				<td th:text="'Tempat Lahir'"></td>
-				<td><input id= "tempatLahir" type="text" name="tempatLahir" class="form-control"/></td>
+				<td><input id= "tempatLahir" required="required" type="text" name="tempatLahir" class="form-control" th:value="*{tempatLahir}"/></td>
 				</tr>
 				<tr>
 				<td th:text="'Tanggal Lahir'"></td>
-				<td><input id="tanggalLahir" type="date" name="tanggalLahir" class="form-control"/></td>
+				<td><input id="tanggalLahir" required="required" type="date" name="tanggalLahir" class="form-control" th:value="*{tanggalLahir}"/></td>
 				</tr>
 				<tr>
 				<td th:text="'Tahun Masuk'"></td>
-				<td><input id="tahunMasuk" type="number" name="tahunMasuk" maxLength="4" pattern="\d{4}" class="form-control"/></td>
+				<td><input id="tahunMasuk" required="required" type="number" name="tahunMasuk" maxLength="4" pattern="\d{4}" class="form-control" th:value="*{tahunMasuk}" /></td>
 				</tr>
 				<tr>
 				<td th:text="'Provinsi'" ></td>
 				<td>
-					<select name="idProvinsi" id="idProvinsi" class="form-control" required="required" th:value="${listProvinsi}">
-				    	<option disabled="disabled" selected="selected" >-- Pilih Provinsi --</option>
-				    	<option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}" ></option>
-				    </select>
+					<div th:if="*{instansi} != null">
+					    <select name="provinsi" id="provinsi" class="form-control" required="required" th:value="${listProvinsi}">
+					    	<option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}" th:selected="${provinsi.id} == *{instansi.provinsi.id}" ></option>
+					    </select>
+					</div>
+					<div th:unless="*{instansi} != null">
+						<select name="provinsi" id="provinsi" class="form-control" required="required" th:value="${listProvinsi}">
+					    	<option disabled="disabled" selected="selected" >-- Pilih Provinsi --</option>
+					    	<option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}" ></option>
+					    </select>
+				    </div>
 				</td>
 				</tr>
 				<tr>
 				<td th:text="'Nama Instansi'"></td>
 				<td>
-					<select name="idInstansi" id="idInstansi" class="form-control" required="required" th:value="${listInstansi}">
-				    	<option disabled="disabled" selected="selected" >-- Pilih Instansi --</option>
-				    </select>
+					<div th:if="*{instansi} != null">
+						<select name="instansi" id="instansi" class="form-control" required="required" th:value="${listInstansi}">
+					    	<option  th:value="*{instansi.id}" selected="selected" th:text="*{instansi.nama}"></option>
+		                    <option disabled="disabled" >Pilih provinsi lain jika ingin ganti instansi</option>
+					    </select>
+					</div>
+					<div th:unless="*{instansi} != null">
+						<select name="instansi" id="instansi" class="form-control" required="required" th:value="${listInstansi}">
+					    	<option disabled="disabled" selected="selected" >-- Pilih Instansi --</option>
+					    </select>
+				    </div>
 				</td>
 				</tr>
 				<tr>
@@ -64,13 +79,13 @@
 				</tr>
 				<tr>
 			</table>
-			<button class="btn" id="submit" type="submit">Submit</button>
+			<button id="submit" class="btn btn-info" type="submit">Submit</button>
 		</form>
 	</div>
 </body>
 
 <script th:inline="javascript">
-	$('#idProvinsi').change(
+	$('#provinsi').change(
 	     function() {
 	         $.getJSON("/instansi/listIntansiFromProvinsi", {
 	             idProvinsi : $(this).val(),
@@ -83,7 +98,7 @@
 	                         + instansi[i].nama + '</option>';
 	             }
 	             html += '</option>';
-	             $('#idInstansi').html(html);
+	             $('#instansi').html(html);
 	         });
 	     });
 	

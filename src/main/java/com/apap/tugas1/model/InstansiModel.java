@@ -40,9 +40,9 @@ public class InstansiModel {
 	@JoinColumn(name="id_provinsi", referencedColumnName="id", nullable=false)
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private ProvinsiModel idProvinsi;
+	private ProvinsiModel provinsi;
 	
-	@OneToMany(mappedBy="idInstansi", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="instansi", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<PegawaiModel> listPegawai;
 
 	public long getId() {
@@ -69,13 +69,23 @@ public class InstansiModel {
 		this.deskripsi = deskripsi;
 	}
 
-	public ProvinsiModel getIdProvinsi() {
-		return idProvinsi;
+	public ProvinsiModel getProvinsi() {
+		return provinsi;
 	}
 
-	public void setIdProvinsi(ProvinsiModel idProvinsi) {
-		this.idProvinsi = idProvinsi;
+	public void setProvinsi(ProvinsiModel provinsi) {
+		this.provinsi = provinsi;
 	}
+
+	public List<PegawaiModel> getListPegawai() {
+		return listPegawai;
+	}
+
+	public void setListPegawai(List<PegawaiModel> listPegawai) {
+		this.listPegawai = listPegawai;
+	}
+
+	
 
 	
 	

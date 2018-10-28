@@ -13,5 +13,5 @@ import com.apap.tugas1.model.ProvinsiModel;
 public interface InstansiDB extends JpaRepository<InstansiModel, Long> {
 	List<InstansiModel> findAll();
 	InstansiModel findById(long idInstansi);
-	List<InstansiModel> findByIdProvinsi(ProvinsiModel provinsi);
+	List<InstansiModel> findByProvinsi(ProvinsiModel provinsi);
 }	

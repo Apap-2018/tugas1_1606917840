@@ -11,27 +11,22 @@
 	<nav th:replace="fragments/fragment :: navbar" ></nav>
 	
 	<div class="container-fluid">
-		<div class="col-md-6">
-			<h3>Tambah Jabatan</h3>
-			<form th:action="@{/jabatan/tambah}" th:object="${jabatan}" method="POST">
-				<table>
-					<tr>
-					<td th:text="Nama" style="width:200"></td>
-					<td><input type="text" name="nama" class="form-control"/></td>
-					</tr>
-					<tr>
-					<td th:text="Deskripsi"></td>
-					<td><input type="text" name="deskripsi" class="form-control"/></td>
-					</tr>
-					<tr>
-					<td th:text="'Gaji Pokok'"></td>
-					<td><input type="number" name="gajiPokok" class="form-control"/></td>
-					</tr>
-				</table>
-				<p></p>
-				<button type="submit" class="btn btn-primary">Submit</button>
-			</form>
-		</div>
+		<h3>Tambah Jabatan</h3>
+		<form th:action="@{/jabatan/tambah}" th:object="${jabatan}" method="POST">
+			<div class="row">
+				<div class="col-md-2" th:text="Nama"></div>
+				<div class="col-md-3"><input type="text" name="nama" class="form-control"/></div>
+			</div>
+			<div class="row">
+				<div class="col-md-2" th:text="Deskripsi"></div>
+				<div class="col-md-3"><input type="text" name="deskripsi" class="form-control"/></div>
+			</div>
+			<div class="row">
+				<div class="col-md-2" th:text="'Gaji Pokok'"></div>
+				<div class="col-md-3"><input type="number" name="gajiPokok" class="form-control"/></div>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
 	</div>
 </body>
 <script th:inline="javascript">	

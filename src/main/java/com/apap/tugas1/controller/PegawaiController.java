@@ -1,7 +1,6 @@
 package com.apap.tugas1.controller;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.PegawaiModel;
-import com.apap.tugas1.model.ProvinsiModel;
 import com.apap.tugas1.service.InstansiService;
 import com.apap.tugas1.service.JabatanService;
 import com.apap.tugas1.service.PegawaiService;
@@ -87,7 +84,7 @@ public class PegawaiController {
 	}
 	
 	@RequestMapping(value="/pegawai/termuda-tertua", method=RequestMethod.GET)
-	private String viewTertuaTermuda(@RequestParam("idInstansi") long idInstansi, Model model) {
+	private String viewTertuaTermuda(@RequestParam("instansi") long idInstansi, Model model) {
 		List<PegawaiModel> listPegawaiAsc = pegawaiService.getPegawaiOrderedAsc(instansiService.getInstansiById(idInstansi));
 		PegawaiModel pegawaiTertua = listPegawaiAsc.get(0);
 		PegawaiModel pegawaiTermuda = listPegawaiAsc.get(listPegawaiAsc.size()-1);
@@ -112,9 +109,10 @@ public class PegawaiController {
 	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.POST)
 	private String updatePegawaiSubmit(@RequestParam("nip") String nip, @ModelAttribute PegawaiModel pegawaiTemp, Model model) {
 		PegawaiModel pegawaiLama = pegawaiService.getPegawaiDetailByNip(pegawaiTemp.getNip());
-		pegawaiService.setNipPegawai(pegawaiTemp);
+		if (!pegawaiTemp.getTahunMasuk().equals(pegawaiLama.getTahunMasuk()) || !pegawaiTemp.getTanggalLahir().equals(pegawaiLama.getTanggalLahir()) || !pegawaiTemp.getInstansi().equals(pegawaiLama.getInstansi()))
+			pegawaiService.setNipPegawai(pegawaiTemp);
 		pegawaiService.ubahPegawai(pegawaiTemp, pegawaiLama);
-		model.addAttribute("notif", "Pegawai berhasil diubah");
+		model.addAttribute("notif", "Pegawai dengan NIP " + pegawaiLama.getNip() + " Berhasil Diubah");
 		return "notif";
 	}
 	
@@ -128,42 +126,40 @@ public class PegawaiController {
 		return "update-pegawai";
 	}
 	
-	@RequestMapping(value = "/pegawai/cari", method = RequestMethod.POST)
-	public String cariPegawai (@RequestParam(value="provinsiId", required = false) Optional<Integer> provinsiId, 
-								@RequestParam(value="instansiId", required = false) Optional<Long> instansiId, 
-								@RequestParam(value="jabatanId", required = false) Optional<Long> jabatanId, Model model) {
+	@RequestMapping(value = "/pegawai/cari", method = RequestMethod.GET)
+	public String cariPegawai (@RequestParam(value="idProvinsi", required = false) Optional<Integer> idProvinsi, 
+								@RequestParam(value="idInstansi", required = false) Optional<Long> idInstansi, 
+								@RequestParam(value="idJabatan", required = false) Optional<Long> idJabatan, Model model) {
 		
-		ProvinsiModel provinsi = provinsiService.getProvinsi(provinsiId.get()); 
-		InstansiModel instansi = instansiService.getInstansiById(instansiId.get());
-		JabatanModel jabatan = jabatanService.getDetailJabatanById(jabatanId.get());
-		
-		model.addAttribute("listJabatan", jabatanService.getAllJabatan());
-		model.addAttribute("listInstansi", instansiService.getAllInstansi());
-		model.addAttribute("listProvinsi", provinsiService.getAllProvinsi());
-		
-		List<PegawaiModel> hasilPencarian = null;
-		if (provinsi!=null) {
-			provinsi = provinsiService.getProvinsi(provinsiId.get());
-			if (instansiId.isPresent()) {
-				instansi = instansiService.getInstansiById(instansiId.get());	
-				if (jabatanId.isPresent()) {
-					jabatan = jabatanService.getDetailJabatanById(jabatanId.get());
-		// skip :"
+		List<PegawaiModel> queryResult = null;
+		if (idProvinsi.isPresent()) {
+			if (idInstansi.isPresent()) {	
+				if (idJabatan.isPresent()) {
+					queryResult = pegawaiService.getPegawaiByProvinsiAndJabatanOrInstansiOrBoth(idJabatan.get(), idInstansi.get());
+				}
+				else {
+					queryResult = pegawaiService.getPegawaiByProvinsiAndJabatanOrInstansiOrBoth(0, idInstansi.get());
 				}
 			}
+			else if (idJabatan.isPresent()) {
+				queryResult = pegawaiService.getPegawaiByProvinsiAndJabatanOrInstansiOrBoth(idJabatan.get(), 0);
+			}
+			else {
+				queryResult = pegawaiService.getPegawaiByProvinsi(idProvinsi.get());
+			}
+		} 
+		else if (idJabatan.isPresent()){
+			queryResult = pegawaiService.getPegawaiByJabatan(idJabatan.get());
 		}
-		model.addAttribute("provinsi", provinsi);
-		model.addAttribute("instansi", instansi);
-		model.addAttribute("jabatan", jabatan);
-		return "cariPegawai";
-	}
-	
-	@RequestMapping(value="/pegawai/cari", method=RequestMethod.GET)
-	public String cari(Model model) {
+		if (idJabatan.isPresent()) model.addAttribute("jabatan", jabatanService.getDetailJabatanById(idJabatan.get()));
+		if (idInstansi.isPresent()) model.addAttribute("instansi", instansiService.getInstansiById(idInstansi.get()));
+		if (idProvinsi.isPresent()) model.addAttribute("provinsi", provinsiService.getProvinsi(idProvinsi.get()));
 		model.addAttribute("listJabatan", jabatanService.getAllJabatan());
 		model.addAttribute("listInstansi", instansiService.getAllInstansi());
 		model.addAttribute("listProvinsi", provinsiService.getAllProvinsi());
+		model.addAttribute("queryResult", queryResult);
 		return "cariPegawai";
 	}
 	
+
 }
