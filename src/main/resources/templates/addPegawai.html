@@ -51,8 +51,7 @@
 				<td>
 					<div th:if="*{instansi} != null">
 						<select name="instansi" id="instansi" class="form-control" required="required" th:value="${listInstansi}">
-					    	<option  th:value="*{instansi.id}" selected="selected" th:text="*{instansi.nama}"></option>
-		                    <option disabled="disabled" >Pilih provinsi lain jika ingin ganti instansi</option>
+					    	<option id="${instansi.id}" th:each="instansi : ${listInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}" th:selected="${instansi.id} == *{instansi.id}"></option>
 					    </select>
 					</div>
 					<div th:unless="*{instansi} != null">

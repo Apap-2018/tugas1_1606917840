@@ -43,12 +43,8 @@ public class PegawaiServiceImpl implements PegawaiService {
 		pegawaiLama.setTahunMasuk(pegawaiTemp.getTahunMasuk());
 		pegawaiLama.setTanggalLahir(pegawaiTemp.getTanggalLahir());
 		pegawaiLama.setTempatLahir(pegawaiTemp.getTempatLahir());
+		pegawaiLama.setJabatanList(pegawaiTemp.getJabatanList());
 		
-		List<JabatanModel> listJabatanTemp = pegawaiTemp.getJabatanList();
-		int counter = listJabatanTemp.size();
-		for (int i = 0; i < counter; i++) {
-			pegawaiLama.getJabatanList().set(i, pegawaiTemp.getJabatanList().get(i));
-		}
 		pegawaiDB.save(pegawaiLama);
 	}
 

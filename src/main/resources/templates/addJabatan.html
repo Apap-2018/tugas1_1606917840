@@ -13,15 +13,15 @@
 	<div class="container-fluid">
 		<h3>Tambah Jabatan</h3>
 		<form th:action="@{/jabatan/tambah}" th:object="${jabatan}" method="POST">
-			<div class="row">
+			<div class="row" style="height:40px">
 				<div class="col-md-2" th:text="Nama"></div>
 				<div class="col-md-3"><input type="text" name="nama" class="form-control"/></div>
 			</div>
-			<div class="row">
+			<div class="row" style="height:40px">
 				<div class="col-md-2" th:text="Deskripsi"></div>
 				<div class="col-md-3"><input type="text" name="deskripsi" class="form-control"/></div>
 			</div>
-			<div class="row">
+			<div class="row" style="height:40px">
 				<div class="col-md-2" th:text="'Gaji Pokok'"></div>
 				<div class="col-md-3"><input type="number" name="gajiPokok" class="form-control"/></div>
 			</div>

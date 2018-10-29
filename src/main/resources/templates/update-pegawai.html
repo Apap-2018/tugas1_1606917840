@@ -42,9 +42,8 @@
 				<tr>
 				<td th:text="'Nama Instansi'"></td>
 				<td>
-					<select name="instansi" id="instansi" class="form-control" required="required" th:value="*{instansi}">
-				    	<option th:value="*{instansi.id}" selected="selected" th:text="*{instansi.nama}"></option>
-			            <option th:each="instansi : ${listInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}" ></option>
+					<select name="instansi" id="instansi" class="form-control" required="required" th:value="${listInstansi}">
+			            <option id="${instansi.id}" th:each="instansi : ${listInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}" th:selected="${instansi.id} == *{instansi.id}"></option>
 				    </select>
 				</td>
 				</tr>
@@ -86,6 +85,7 @@
 	             $('#instansi').html(html);
 	         });
 	     });
+	
 	</script>
 
 </html>
